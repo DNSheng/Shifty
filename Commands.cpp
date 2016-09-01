@@ -1,3 +1,22 @@
+/*
+ * This is what handles and checks the user input before it is sent to any other functions.
+ * This recieves:
+ * 	- Command
+ * 	- Name/location of file
+ * 	- Encryption/Decryption Key
+ * This checks:
+ * 	- Commands
+ * 		- exit
+ * 		- quit
+ * 		- encrypt
+ * 		- decrypt
+ *
+ *
+ * Fix the getCommand(). If entering an invalid command with a file, it gives an error twice.
+ * First, it uses the invalid command as a command, then it loops again and uses the file name
+ * as a command.
+ */
+
 #include "Commands.h"
 //#include "Debug.h"
 
@@ -5,44 +24,47 @@
 
 void initialization(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
 {
+	command.clear();
+	file.clear();
 	getCommand(command, file, decrypting, encrypting);
 	//DEBUGgetCommand(command, file);																			//DEBUG	FUNCTION CALL
 	commandCheck(command, file, decrypting, encrypting);
 }
 
-void commandCheck(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
-{
-	if(command == "decrypt")
-	{
-		std::cout << "DECRYPTING..." << std::endl;																//DEBUG STATEMENT
-		decrypting = true;
-	}
-	else if (command == "encrypt")
-	{
-		std::cout << "ENCRYPTING..." << std::endl;																//DEBUG STATEMENT
-		encrypting = true;
-	}
-	else
-	{
-		std::cout << "ERROR: Unknown command." << std::endl;
-		initialization(command, file, decrypting, encrypting);
-	}
-
-}
-
 void getCommand(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
 {
+	command.clear();
 	std::cout << "> ";
 	std::cin >> command;
-	exitCheck(command);
-	if(isClear(command))
+	if((command == "decrypt") || (command == "encrypt"))
 	{
-		system("cls");
-		initialization(command, file, decrypting, encrypting);
+		std::cin >> file;
 	}
 	else
 	{
-		std::cin >> file;
+		exitCheck(command);
+		if(isClear(command))
+		{
+			system("cls");
+			initialization(command, file, decrypting, encrypting);
+		}
+		else
+		{
+			std::cout << "COMMAND: |" << command << "|\n";
+			std::cout << "FILE: |" << file << "|\n";
+			std::cout << "Error: Unknown Command son" << std::endl;
+			initialization(command, file, decrypting, encrypting);
+		}
+	}
+	std::cout << "COMMAND: |" << command << "|\n";
+	std::cout << "FILE: |" << file << "|\n";
+}
+
+void exitCheck(std::string& command)
+{
+	if(command == "exit")
+	{
+		exit(0);
 	}
 }
 
@@ -58,12 +80,24 @@ bool isClear(std::string& command)
 	}
 }
 
-void exitCheck(std::string& command)
+void commandCheck(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
 {
-	if(command == "exit")
+	if(command == "decrypt")
 	{
-		exit(0);
+		//std::cout << "DECRYPTING..." << std::endl;																//DEBUG STATEMENT
+		decrypting = true;
 	}
+	else if (command == "encrypt")
+	{
+		//std::cout << "ENCRYPTING..." << std::endl;																//DEBUG STATEMENT
+		encrypting = true;
+	}
+	else
+	{
+		std::cout << "ERROR: Unknown command" << std::endl;
+		initialization(command, file, decrypting, encrypting);
+	}
+
 }
 
 void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting)
@@ -79,7 +113,11 @@ void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting)
 	std::cin >> encryptionKey;
 	if(encryptionKey > CIPHER_SIZE)
 	{
-		encryptionKey -= CIPHER_SIZE;
+		encryptionKey = encryptionKey % CIPHER_SIZE;
+	}
+	else if(encryptionKey < 0)
+	{
+		encryptionKey = (encryptionKey * -1) % CIPHER_SIZE;
 	}
 }
 
