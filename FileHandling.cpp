@@ -9,7 +9,7 @@
 void ReadFile(const char* fileName, int encryptionKey, bool decrypting, bool encrypting)
 {
 	std::string line;
-	std::ifstream myFile (fileName);								//Open file
+	std::fstream myFile (fileName);								//Open file
 
 		if(myFile.is_open())										//While open, get the key
 		{
