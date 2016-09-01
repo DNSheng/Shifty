@@ -39,6 +39,7 @@ void getCommand(std::string& command, std::string& file, bool& decrypting, bool&
 	{
 		//std::cin >> file;
 		getline(std::cin, file);
+		std::cout << "FILENAME FROM GETCOMMAND: " << file << std::endl;
 	}
 	else
 	{
@@ -107,12 +108,8 @@ void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting)
 		std::cout << "Enter the encryption key: " << std::endl << "> ";
 	}
 	std::cin >> encryptionKey;
-	if(encryptionKey > CIPHER_SIZE)
+	if((encryptionKey > CIPHER_SIZE) | (encryptionKey < 0))
 	{
-		encryptionKey = encryptionKey % CIPHER_SIZE;
-	}
-	else if(encryptionKey < 0)
-	{
-		encryptionKey = (encryptionKey * -1) % CIPHER_SIZE;
+		encryptionKey = (encryptionKey % CIPHER_SIZE);
 	}
 }

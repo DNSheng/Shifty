@@ -46,7 +46,6 @@ void parseChar(int encryptionKey, char fileChar, bool& decrypting, bool& encrypt
 	std::string currentEncryptedChar(1, encryptedChar);
 	parseCharFinalResult.append(currentEncryptedChar);
 	currentEncryptedChar.clear();
-
 	std::cout << encryptedChar;																			//DEBUG, OUTPUTS TO SCREEN
 }
 void passingCharInLine(std::string& line, int& encryptionKey, bool& decrypting, bool& encrypting, const char* fileWritingTo)
@@ -63,5 +62,6 @@ void passingCharInLine(std::string& line, int& encryptionKey, bool& decrypting, 
 	//std::cout << std::endl;
 	//std::cout << parseCharFinalResult << std::endl;
 	appendToFile(fileWritingTo, parseCharFinalResult);
-	parseCharFinalResult.clear();
+	//parseCharFinalResult.clear();
+	//appendToFile(fileWritingTo, "\n");
 }

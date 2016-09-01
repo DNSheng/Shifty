@@ -12,20 +12,20 @@ using namespace std;
 
 int main()
 {
-	string command, file;
+	string command, file, fixedName;
 	bool decrypting, encrypting;
 	int encryptionKey = 0;
 
 	initialization(command, file, decrypting, encrypting);
 	//DEBUGcommandCheck(decrypting, encrypting);					//DEBUG FUNCTION CALL
 
-	const char *fileName = fixedFileName(file).c_str();				//Convert string to char*
+	fixedName = fixedFileName(file);
 
 	//string test = fileName;
 
 	//cout << "FIXED FILENAME MAIN: " << test << endl;
 
-	readFile(fileName, encryptionKey, decrypting, encrypting);
+	readFile(fixedName, encryptionKey, decrypting, encrypting);
 
 	main();
 }
