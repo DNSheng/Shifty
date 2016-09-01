@@ -2,10 +2,11 @@
 #include "Decrypt.h"
 #include "Encrypt.h"
 #include "Conversions.h"
+#include "FileHandling.h"
 
 #include <iostream>
 
-void parseChar(int encryptionKey, char fileChar, bool& decrypting, bool& encrypting)
+void parseChar(int encryptionKey, char fileChar, bool& decrypting, bool& encrypting, const char* fileWritingTo)
 {
 	int fileCharNumber = charToInt(fileChar);
 	int modifiedInteger = fileCharNumber;
@@ -40,16 +41,27 @@ void parseChar(int encryptionKey, char fileChar, bool& decrypting, bool& encrypt
 	}
 	//cout << encryptedInteger;																			//DEBUG STATEMENT
 	char encryptedChar = intToChar(modifiedInteger);
-	std::cout << encryptedChar;
+
+	//WRITE CHAR TO FILE HERE -----------------------------------------------------
+	std::string currentEncryptedChar(1, encryptedChar);
+	parseCharFinalResult.append(currentEncryptedChar);
+	currentEncryptedChar.clear();
+	std::cout << encryptedChar;																			//DEBUG, OUTPUTS TO SCREEN
 }
-void passingCharInLine(std::string& line, int& encryptionKey, bool& decrypting, bool& encrypting)
+void passingCharInLine(std::string& line, int& encryptionKey, bool& decrypting, bool& encrypting, const char* fileWritingTo)
 {
 	char fileChar;
 	//cout << "ENCRYPTIONKEY: " << encryptionKey << endl;												//DEBUG STATEMENT
 	unsigned i;
+	//std::cout << "fileName at passingCharInLine: " << fileWritingTo << std::endl;
 	for(i = 0; i < line.length(); i++)
 	{
 		fileChar = line.at(i);
-		parseChar(encryptionKey, fileChar, decrypting, encrypting);
+		parseChar(encryptionKey, fileChar, decrypting, encrypting, fileWritingTo);
 	}
+	//std::cout << std::endl;
+	//std::cout << parseCharFinalResult << std::endl;
+	appendToFile(fileWritingTo, parseCharFinalResult);
+	//parseCharFinalResult.clear();
+	//appendToFile(fileWritingTo, "\n");
 }

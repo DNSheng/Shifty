@@ -1,9 +1,10 @@
 #ifndef FILEHANDLING_H
 #define FILEHANDLING_H
 
-#include <string>
+#include <fstream>
 
-void ReadFile(const char* fileName, int encryptionKey, bool decrypting, bool encrypting);
-void WriteFile(const char* fileName);
+void readFile(std::string fileName, int encryptionKey, bool decrypting, bool encrypting);
+void createNewFile(const char* fileName);
+void appendToFile(const char* fileName, std::string input);
 
 #endif

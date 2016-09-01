@@ -12,4 +12,5 @@ void exitCheck(std::string& command);
 bool isClear(std::string& command);
 void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting);
 
+
 #endif

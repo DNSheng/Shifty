@@ -11,7 +11,6 @@
  * 		- encrypt
  * 		- decrypt
  *
- *
  * Fix the getCommand(). If entering an invalid command with a file, it gives an error twice.
  * First, it uses the invalid command as a command, then it loops again and uses the file name
  * as a command.
@@ -24,8 +23,8 @@
 
 void initialization(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
 {
-	command.clear();
-	file.clear();
+	//command.clear();
+	//file.clear();
 	getCommand(command, file, decrypting, encrypting);
 	//DEBUGgetCommand(command, file);																			//DEBUG	FUNCTION CALL
 	commandCheck(command, file, decrypting, encrypting);
@@ -33,12 +32,14 @@ void initialization(std::string& command, std::string& file, bool& decrypting, b
 
 void getCommand(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
 {
-	command.clear();
+	//command.clear();
 	std::cout << "> ";
 	std::cin >> command;
 	if((command == "decrypt") || (command == "encrypt"))
 	{
-		std::cin >> file;
+		//std::cin >> file;
+		getline(std::cin, file);
+		std::cout << "FILENAME FROM GETCOMMAND: " << file << std::endl;
 	}
 	else
 	{
@@ -50,14 +51,10 @@ void getCommand(std::string& command, std::string& file, bool& decrypting, bool&
 		}
 		else
 		{
-			std::cout << "COMMAND: |" << command << "|\n";
-			std::cout << "FILE: |" << file << "|\n";
 			std::cout << "Error: Unknown Command son" << std::endl;
 			initialization(command, file, decrypting, encrypting);
 		}
 	}
-	std::cout << "COMMAND: |" << command << "|\n";
-	std::cout << "FILE: |" << file << "|\n";
 }
 
 void exitCheck(std::string& command)
@@ -111,13 +108,8 @@ void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting)
 		std::cout << "Enter the encryption key: " << std::endl << "> ";
 	}
 	std::cin >> encryptionKey;
-	if(encryptionKey > CIPHER_SIZE)
+	if((encryptionKey > CIPHER_SIZE) | (encryptionKey < 0))
 	{
-		encryptionKey = encryptionKey % CIPHER_SIZE;
-	}
-	else if(encryptionKey < 0)
-	{
-		encryptionKey = (encryptionKey * -1) % CIPHER_SIZE;
+		encryptionKey = (encryptionKey % CIPHER_SIZE);
 	}
 }
-
