@@ -30,10 +30,6 @@ Shifty is not entirely complete, as there are a few key features I would like to
   + Gives user a sample of the five options with the decryption key used.
     + If it is one of the options, user enters which one and the rest is decrypted.
     + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
-+ More secure control over user inputted commands
-  + May need to redo entire functions, where getline() is used and the string is split at the first space
-  + Entering more after the filename doesn't work (i.e. encrypt file.txt test)
-  	+ Check for spaces and if it ends in ".txt"?
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.
