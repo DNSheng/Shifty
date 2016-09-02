@@ -42,7 +42,7 @@ int decryptChar(int encryptionKey, int fileCharNum, bool isUpper)
 	//cout << "ENCRYPTEDCHAR: " << encryptedChar << endl;													//DEBUG STATEMENT
 	return encryptedChar;
 }
-void beginDecryption(std::string& line, int& encryptionKey, bool& decrypting, bool& encrypting, const char* fileWritingTo)
+void beginDecryption(std::string& line, int& encryptionKey, Status status, const char* fileWritingTo)
 {
 	if(encryptionKey == 0)
 	{
@@ -50,6 +50,6 @@ void beginDecryption(std::string& line, int& encryptionKey, bool& decrypting, bo
 	}
 	else
 	{
-		passingCharInLine(line, encryptionKey, decrypting, encrypting, fileWritingTo);
+		passingCharInLine(line, encryptionKey, status, fileWritingTo);
 	}
 }

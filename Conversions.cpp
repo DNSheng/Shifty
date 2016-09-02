@@ -20,12 +20,12 @@ std::string fixedFileName(std::string fileName)
 	return fixed;
 }
 
-std::string generateNewName(std::string currentName, bool encrypting)
+std::string generateNewName(std::string currentName, Status status)
 {
 	int currentNameSize = currentName.length() - 4;					//Subtract the ".txt" part
 	std::string newName = currentName.substr(0, currentNameSize);
 	//std::cout << newName << std::endl;
-	if(encrypting)
+	if(status == ENCRYPTING)
 	{
 		newName.append("_encrypted.txt");
 	}

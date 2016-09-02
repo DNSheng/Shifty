@@ -21,16 +21,16 @@
 
 #include <iostream>
 
-void initialization(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
+void initialization(std::string& command, std::string& file, Status& status)
 {
 	//command.clear();
 	//file.clear();
-	getCommand(command, file, decrypting, encrypting);
+	getCommand(command, file, status);
 	//DEBUGgetCommand(command, file);																			//DEBUG	FUNCTION CALL
-	commandCheck(command, file, decrypting, encrypting);
+	commandCheck(command, file, status);
 }
 
-void getCommand(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
+void getCommand(std::string& command, std::string& file, Status& status)
 {
 	//command.clear();
 	std::cout << "> ";
@@ -47,12 +47,12 @@ void getCommand(std::string& command, std::string& file, bool& decrypting, bool&
 		if(isClear(command))
 		{
 			system("cls");
-			initialization(command, file, decrypting, encrypting);
+			initialization(command, file, status);
 		}
 		else
 		{
 			std::cout << "Error: Unknown Command son" << std::endl;
-			initialization(command, file, decrypting, encrypting);
+			initialization(command, file, status);
 		}
 	}
 }
@@ -77,33 +77,33 @@ bool isClear(std::string& command)
 	}
 }
 
-void commandCheck(std::string& command, std::string& file, bool& decrypting, bool& encrypting)
+void commandCheck(std::string& command, std::string& file, Status& status)
 {
 	if(command == "decrypt")
 	{
 		//std::cout << "DECRYPTING..." << std::endl;																//DEBUG STATEMENT
-		decrypting = true;
+		status = DECRYPTING;
 	}
 	else if (command == "encrypt")
 	{
 		//std::cout << "ENCRYPTING..." << std::endl;																//DEBUG STATEMENT
-		encrypting = true;
+		status = ENCRYPTING;
 	}
 	else
 	{
 		std::cout << "ERROR: Unknown command" << std::endl;
-		initialization(command, file, decrypting, encrypting);
+		initialization(command, file, status);
 	}
 
 }
 
-void getEncryptionKey(int& encryptionKey, bool& decrypting, bool& encrypting)
+void getEncryptionKey(int& encryptionKey, Status& status)
 {
-	if(decrypting)
+	if(status == DECRYPTING)
 	{
 		std::cout << "Enter the decrypting key (to solve, enter 0):" << std::endl << "> ";
 	}
-	else if(encrypting)
+	else if(status == ENCRYPTING)
 	{
 		std::cout << "Enter the encryption key: " << std::endl << "> ";
 	}

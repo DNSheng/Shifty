@@ -13,10 +13,10 @@ using namespace std;
 int main()
 {
 	string command, file, fixedName;
-	bool decrypting, encrypting;
+	Status status;
 	int encryptionKey = 0;
 
-	initialization(command, file, decrypting, encrypting);
+	initialization(command, file, status);
 	//DEBUGcommandCheck(decrypting, encrypting);					//DEBUG FUNCTION CALL
 
 	fixedName = fixedFileName(file);
@@ -25,7 +25,7 @@ int main()
 
 	//cout << "FIXED FILENAME MAIN: " << test << endl;
 
-	readFile(fixedName, encryptionKey, decrypting, encrypting);
+	readFile(fixedName, encryptionKey, status);
 
 	main();
 }

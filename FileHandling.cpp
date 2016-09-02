@@ -7,12 +7,12 @@
 #include <iostream>
 #include <fstream>
 
-void readFile(std::string fileName, int encryptionKey, bool decrypting, bool encrypting)
+void readFile(std::string fileName, int encryptionKey, Status status)
 {
 	std::string line, newFileName;
 
 	std::cout << "readFile currentFileName: " << fileName << std::endl;
-	newFileName = generateNewName(fileName, encrypting);
+	newFileName = generateNewName(fileName, status);
 	//std::cout << "fileName is: " << currentFileName << std::endl;
 	std::cout << "The new file name is: " << newFileName << std::endl;
 
@@ -22,26 +22,26 @@ void readFile(std::string fileName, int encryptionKey, bool decrypting, bool enc
 
 		if(myFile.is_open())										//While open, get the key
 		{
-			if(decrypting)
+			if(status == DECRYPTING)
 			{
-				getEncryptionKey(encryptionKey, decrypting, encrypting);
+				getEncryptionKey(encryptionKey, status);
 				createNewFile(newFileNameChar);
 				while(!myFile.eof())
 				{
 					getline(myFile, line);
-					beginDecryption(line, encryptionKey, decrypting, encrypting, newFileNameChar);
+					beginDecryption(line, encryptionKey, status, newFileNameChar);
 				}
 				myFile.close();
 				std::cout << "\nDecryption is complete..." << std::endl;
 			}
-			else if(encrypting)
+			else if(status == ENCRYPTING)
 			{
-				getEncryptionKey(encryptionKey, decrypting, encrypting);
+				getEncryptionKey(encryptionKey, status);
 				createNewFile(newFileNameChar);
 				while(!myFile.eof())
 				{
 					getline(myFile, line);
-					passingCharInLine(line, encryptionKey, decrypting, encrypting, newFileNameChar);
+					passingCharInLine(line, encryptionKey, status, newFileNameChar);
 				}
 				myFile.close();
 				std::cout << "\nEncryption is complete..." << std::endl;
