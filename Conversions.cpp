@@ -14,12 +14,6 @@ int charToInt(char inputChar)
 	return outputNumber;
 }
 
-std::string fixedFileName(std::string fileName)
-{
-	std::string fixed = fileName.substr(1, fileName.length());		//Removes the space in front
-	return fixed;
-}
-
 std::string generateNewName(std::string currentName, Status status)
 {
 	int currentNameSize = currentName.length() - 4;					//Subtract the ".txt" part

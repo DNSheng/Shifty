@@ -1,5 +1,5 @@
 #include "FileHandling.h"
-#include "Commands.h"
+#include "Input.h"
 #include "Decrypt.h"
 #include "CharParse.h"
 #include "Conversions.h"
@@ -11,14 +11,10 @@ void readFile(std::string fileName, int encryptionKey, Status status)
 {
 	std::string line, newFileName;
 
-	std::cout << "readFile currentFileName: " << fileName << std::endl;
 	newFileName = generateNewName(fileName, status);
-	//std::cout << "fileName is: " << currentFileName << std::endl;
-	std::cout << "The new file name is: " << newFileName << std::endl;
-
 	const char* newFileNameChar = newFileName.c_str();
 
-	std::ifstream myFile (fileName);									//Open file
+	std::ifstream myFile (fileName);								//Open file
 
 		if(myFile.is_open())										//While open, get the key
 		{
