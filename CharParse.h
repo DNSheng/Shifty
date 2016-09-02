@@ -1,6 +1,8 @@
 #ifndef CHARPARSE_H
 #define CHARPARSE_H
 
+#include "Status.h"
+
 #include <string>
 
 #define LOWERCASE_A_BOUND 97
@@ -10,7 +12,7 @@
 
 static std::string parseCharFinalResult;
 
-void parseChar(int encryptionKey, char fileChar, bool& decrypting, bool& encrypting, const char* fileWritingTo);
-void passingCharInLine(std::string& line, int& encryptionKey, bool& decrypting, bool& encrypting, const char* fileWritingTo);
+void parseChar(int encryptionKey, char fileChar, Status status, const char* fileWritingTo);		//Status address& ?
+void passingCharInLine(std::string& line, int& encryptionKey, Status status, const char* fileWritingTo);	//Status address& ?
 
 #endif
