@@ -1,5 +1,3 @@
-#include "CommandTest.h"
-
 /*
  * This is what handles and checks the user input before it is sent to any other functions.
  * This recieves:
@@ -18,33 +16,35 @@
  * as a command.
  */
 
+#include "Input.h"
+
 #include <iostream>
 
-void initializationTEST(std::string& command, std::string& file, Status& status)
+void initialization(std::string& command, std::string& file, Status& status)
 {
 	command.clear();
 	file.clear();
-	getUserInputTEST(command, file);
-	userInputCheckTEST(command, file, status);
+	getUserInput(command, file);
+	userInputCheck(command, file, status);
 }
 
-void getUserInputTEST(std::string& command, std::string& file)
+void getUserInput(std::string& command, std::string& file)
 {
 	std::string userInput;
 	std::cout << "> ";
 	getline(std::cin, userInput);
-	interpretInputTEST(userInput, command, file);
+	interpretInput(userInput, command, file);
 }
 
-void interpretInputTEST(std::string userInput, std::string& command, std::string& file)
+void interpretInput(std::string userInput, std::string& command, std::string& file)
 {
 	//Split userInput into the command and file, ignoring any thing after the file
 	unsigned int fileStartingPoint;
-	splitCommandTEST(userInput, command, fileStartingPoint);
-	splitFileTEST(userInput, file, fileStartingPoint);
+	splitCommand(userInput, command, fileStartingPoint);
+	splitFile(userInput, file, fileStartingPoint);
 }
 
-void splitCommandTEST(std::string userInput, std::string& command, unsigned int& fileStartingPoint)
+void splitCommand(std::string userInput, std::string& command, unsigned int& fileStartingPoint)
 {
 	std::string tempString;
 	for(unsigned int i = 0; i < userInput.length(); i++)
@@ -63,19 +63,17 @@ void splitCommandTEST(std::string userInput, std::string& command, unsigned int&
 	}
 }
 
-void splitFileTEST(std::string userInput, std::string& file, unsigned int startingPoint)
+void splitFile(std::string userInput, std::string& file, unsigned int startingPoint)
 {
-	if(startingPoint == 0)
-	{
-		//There was no space/file given by user, file will remain empty
-	}
-	else
+	//If startingPoint == 0, there was no space/file given by user, only a command.
+	//Therefore, the file string in main.cpp will remain empty.
+	if(startingPoint != 0)
 	{
 		file = userInput.substr(startingPoint, userInput.length() - startingPoint);
 	}
 }
 
-void splitFileAlternateTEST(std::string userInput, std::string& file, unsigned int startingPoint)
+void splitFileAlternate(std::string userInput, std::string& file, unsigned int startingPoint)
 {
 	/*
 	 * This works, but when checking if the file is valid, an error given by checkFile()
@@ -108,19 +106,19 @@ void splitFileAlternateTEST(std::string userInput, std::string& file, unsigned i
 	}
 }
 
-void userInputCheckTEST(std::string& command, std::string& file, Status& status)
+void userInputCheck(std::string& command, std::string& file, Status& status)
 {
-	checkCommandTEST(command, file, status);
-	checkFileTEST(command, file, status);
+	checkCommand(command, file, status);
+	checkFile(command, file, status);
 }
 
-void checkCommandTEST(std::string& command, std::string& file, Status& status)
+void checkCommand(std::string& command, std::string& file, Status& status)
 {
-	exitCheckTEST(command);
-	if(isClearCommandTEST(command))
+	exitCheck(command);
+	if(isClearCommand(command))
 	{
 		system("cls");
-		initializationTEST(command, file, status);
+		initialization(command, file, status);
 	}
 	else if(command == "encrypt")
 	{
@@ -133,39 +131,48 @@ void checkCommandTEST(std::string& command, std::string& file, Status& status)
 	else
 	{
 		std::cout << "ERROR: Unknown command..." << std::endl;
-		initializationTEST(command, file, status);
+		initialization(command, file, status);
 	}
 }
 
-void checkFileTEST(std::string& command, std::string& file, Status& status)
+void checkFile(std::string& command, std::string& file, Status& status)
 {
 	if(file.empty())
 	{
 		std::cout << "Error: No file given" << std::endl;
-		initializationTEST(command, file, status);
+		initialization(command, file, status);
 	}
 
 	std::string fileExtension = file.substr(file.length() - 4, 4);
 
 	if(fileExtension != ".txt")
 	{
+		//Do for-loop to check for a space. If there is, too many arguments. If not, wrong file format.
+		for(unsigned int i = 0; i < file.length(); i++)
+		{
+			if(file[i] == ' ')
+			{
+				std::cout << "Error: Too many arguments" << std::endl;
+				initialization(command, file, status);
+			}
+		}
 		std::cout << "Error: Invalid file format" << std::endl;
-		initializationTEST(command, file, status);
+		initialization(command, file, status);
 	}
 }
 
-void checkFileAlternateTEST(std::string& command, std::string& file, Status& status)
+void checkFileAlternate(std::string& command, std::string& file, Status& status)
 {
 	std::string fileExtension;
 	fileExtension = file.substr(file.length() - 4, 4);
 	if(fileExtension != ".txt")
 	{
 		std::cout << "Error: Invalid file format..." << std::endl;
-		initializationTEST(command, file, status);
+		initialization(command, file, status);
 	}
 }
 
-void exitCheckTEST(std::string command)
+void exitCheck(std::string command)
 {
 	if(command == "exit")
 	{
@@ -173,7 +180,7 @@ void exitCheckTEST(std::string command)
 	}
 }
 
-bool isClearCommandTEST(std::string command)
+bool isClearCommand(std::string command)
 {
 	if(command == "cls")
 	{
@@ -185,7 +192,7 @@ bool isClearCommandTEST(std::string command)
 	}
 }
 
-void getEncryptionKeyTEST(int& encryptionKey, Status& status)
+void getEncryptionKey(int& encryptionKey, Status& status)
 {
 	if(status == DECRYPTING)
 	{

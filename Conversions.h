@@ -8,8 +8,6 @@
 int charToInt(char inputChar);
 char intToChar(int inputInt);
 
-std::string fixedFileName(std::string fileName);
-
 std::string generateNewName(std::string currentName, Status status);
 
 #endif
