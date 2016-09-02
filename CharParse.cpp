@@ -53,15 +53,10 @@ void passingCharInLine(std::string& line, int& encryptionKey, Status status, con
 	char fileChar;
 	//cout << "ENCRYPTIONKEY: " << encryptionKey << endl;												//DEBUG STATEMENT
 	unsigned i;
-	//std::cout << "fileName at passingCharInLine: " << fileWritingTo << std::endl;
 	for(i = 0; i < line.length(); i++)
 	{
 		fileChar = line.at(i);
 		parseChar(encryptionKey, fileChar, status, fileWritingTo);
 	}
-	//std::cout << std::endl;
-	//std::cout << parseCharFinalResult << std::endl;
 	appendToFile(fileWritingTo, parseCharFinalResult);
-	//parseCharFinalResult.clear();
-	//appendToFile(fileWritingTo, "\n");
 }

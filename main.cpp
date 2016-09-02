@@ -5,7 +5,7 @@
 //#include "Debug.h"
 
 #include "FileHandling.h"
-#include "Commands.h"
+#include "CommandTest.h"
 #include "Conversions.h"
 
 using namespace std;
@@ -16,14 +16,10 @@ int main()
 	Status status;
 	int encryptionKey = 0;
 
-	initialization(command, file, status);
+	initializationTEST(command, file, status);
 	//DEBUGcommandCheck(decrypting, encrypting);					//DEBUG FUNCTION CALL
 
 	fixedName = fixedFileName(file);
-
-	//string test = fileName;
-
-	//cout << "FIXED FILENAME MAIN: " << test << endl;
 
 	readFile(fixedName, encryptionKey, status);
 

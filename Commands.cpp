@@ -17,14 +17,18 @@
  */
 
 #include "Commands.h"
-//#include "Debug.h"
 
 #include <iostream>
 
 void initialization(std::string& command, std::string& file, Status& status)
 {
-	//command.clear();
-	//file.clear();
+	std::cout << "COMMAND: " << command << std::endl;
+	std::cout << "FILE: " << file << std::endl;
+	command.clear();
+	file.clear();
+	std::cout << "CLEARED" << std::endl;
+	std::cout << "COMMAND: " << command << std::endl;
+	std::cout << "FILE: " << file << std::endl;
 	getCommand(command, file, status);
 	//DEBUGgetCommand(command, file);																			//DEBUG	FUNCTION CALL
 	commandCheck(command, file, status);
@@ -35,6 +39,8 @@ void getCommand(std::string& command, std::string& file, Status& status)
 	//command.clear();
 	std::cout << "> ";
 	std::cin >> command;
+	std::cout << "COMMAND: " << command << std::endl;
+	std::cout << "FILE: " << file << std::endl;
 	if((command == "decrypt") || (command == "encrypt"))
 	{
 		//std::cin >> file;
@@ -44,7 +50,7 @@ void getCommand(std::string& command, std::string& file, Status& status)
 	else
 	{
 		exitCheck(command);
-		if(isClear(command))
+		if(isClearCommand(command))
 		{
 			system("cls");
 			initialization(command, file, status);
@@ -65,7 +71,7 @@ void exitCheck(std::string& command)
 	}
 }
 
-bool isClear(std::string& command)
+bool isClearCommand(std::string& command)
 {
 	if(command == "cls")
 	{

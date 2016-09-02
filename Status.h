@@ -3,7 +3,7 @@
 
 enum Status
 {
-	DECRYPTING = 0,
+	DECRYPTING,
 	ENCRYPTING
 };
 

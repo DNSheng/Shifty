@@ -24,7 +24,6 @@ std::string generateNewName(std::string currentName, Status status)
 {
 	int currentNameSize = currentName.length() - 4;					//Subtract the ".txt" part
 	std::string newName = currentName.substr(0, currentNameSize);
-	//std::cout << newName << std::endl;
 	if(status == ENCRYPTING)
 	{
 		newName.append("_encrypted.txt");
@@ -33,6 +32,5 @@ std::string generateNewName(std::string currentName, Status status)
 	{
 		newName.append("_decrypted.txt");
 	}
-	//std::cout << "generateNewName gives: " << newName << std::endl;
 	return newName;
 }
