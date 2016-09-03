@@ -75,10 +75,25 @@ Windows Example:
   + File writing properly formats output to be identical to the input
 + Included a help menu
 + Included a start up menu
-+ Current bug: Finishing a cycle (initialization() and readFile() done) and starting another will output to the screen:
+
+##Sept. 3, 2016 v0.81
++ Fixed bug where upon entering second valid command, program displayed:
 ```
 > Error: No file given
 ```
+  This was because newline was fed to userInput which created an empty command string. However, the program doesn't check for restart
+  until after the file string was checked, so it ended up as a file error.
+  The fix was done by calling checkRestart() after checkCommand().
++ Fixed bug where upon finishing encryption/decryption, program displayed:
+```
+> >
+```
+instead of:
+```
+> 
+```
+  This was because the newline character from getting the encryptionKey was passed to userInput in the next call of initialization().
+  The fix was done by calling cin.ignore() after getting the encryptionKey.
 
 #Upcoming
 Shifty is not entirely complete, as there are a few key features I would like to implement eventually.
@@ -88,7 +103,6 @@ Shifty is not entirely complete, as there are a few key features I would like to
   + Gives user a sample of the five options with the decryption key used.
     + If it is one of the options, user enters which one and the rest is decrypted.
     + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
-+ Fix bug involving repeated encryption attempts, described in 09/02/2016 patch notes.
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.

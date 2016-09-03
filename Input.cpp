@@ -10,11 +10,15 @@ void initialization(std::string& file, Status& status)
 	command.clear();
 	file.clear();
 
-	std::cout << "> ";
+	inputArrow();
 	getline(std::cin, userInput);
-	std::cin.clear();
 	splitting(userInput, command, file);
 	checking(command, file, status);
+}
+
+void inputArrow()
+{
+	std::cout << "> ";
 }
 
 void handleEmptyInput(std::string userInput, std::string& file, Status& status)
@@ -65,6 +69,7 @@ void splitFile(std::string userInput, std::string& file, unsigned int pointer)
 void checking(std::string command, std::string& file, Status& status)
 {
 	checkCommand(command, status);
+	checkRestart(file, status);
 	checkFile(file, status);
 	checkRestart(file, status);
 }
@@ -154,14 +159,17 @@ void getEncryptionKey(int& encryptionKey, Status status)
 	if(status == ENCRYPTING)
 	{
 		std::cout << "Please enter an encryption key" << std::endl;
-		std::cout << "> ";
+		inputArrow();
 		while(!(std::cin >> keyBuffer))
 		{
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "Error: Invalid key, please try again" << std::endl;
-			std::cout << "> ";
+			inputArrow();
 		}
+
+		std::cin.ignore();
+
 		if(isValidKey(keyBuffer))
 		{
 			encryptionKey = keyBuffer;
@@ -176,14 +184,17 @@ void getEncryptionKey(int& encryptionKey, Status status)
 	else if(status == DECRYPTING)
 	{
 		std::cout << "Please enter the decryption key (enter 0 to brute force)" << std::endl;
-		std::cout << "> ";
+		inputArrow();
 		while(!(std::cin >> keyBuffer))
 		{
 			std::cin.clear();
 			std::cin.ignore(1000, '\n');
 			std::cout << "Error: Invalid key, please try again" << std::endl;
-			std::cout << "> ";
+			inputArrow();
 		}
+
+		std::cin.ignore();
+
 		if(isValidKey(keyBuffer))
 		{
 			encryptionKey = keyBuffer;
@@ -198,7 +209,6 @@ void getEncryptionKey(int& encryptionKey, Status status)
 	else
 	{
 		std::cout << "Error: An unexpected error has occurred" << std::endl;
-		//TODO: Restart the program?
 		exit(0);
 	}
 }

@@ -13,6 +13,7 @@
 static std::string command, userInput;
 
 void initialization(std::string& file, Status& status);
+void inputArrow();
 
 void handleEmptyInput(std::string userInput, std::string& file, Status& status);
 
