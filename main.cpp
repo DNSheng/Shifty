@@ -2,11 +2,9 @@
 #include "Input.h"
 #include "FileHandling.h"
 
-using namespace std;
-
 int main()
 {
-	string file;
+	std::string file;
 	Status status;
 
 	mainMenu();
