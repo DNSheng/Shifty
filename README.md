@@ -62,6 +62,27 @@ Windows Example:
 ```
 
 #Patch Notes
+##Sept. 3, 2016 v0.81
++ Fixed bug where upon entering second valid command, program displayed:
+```
+> Error: No file given
+```
+  This was because newline was fed to userInput which created an empty command string. However, the program doesn't check for restart
+  until after the file string was checked, so it ended up as a file error.
+  
+  The fix was done by calling checkRestart() after checkCommand().
++ Fixed bug where upon finishing encryption/decryption, program displayed:
+```
+> >
+```
+instead of:
+```
+> 
+```
+  This was because the newline character from getting the encryptionKey was passed to userInput in the next call of initialization().
+  
+  The fix was done by calling cin.ignore() after getting the encryptionKey.
+  
 ##Sept. 2, 2016 v0.80
 + Complete rebuild done for input handling, file reading, file writing, and character encryption
   + Input handling now works by getting a single line and splitting it into a command and file location
@@ -75,25 +96,6 @@ Windows Example:
   + File writing properly formats output to be identical to the input
 + Included a help menu
 + Included a start up menu
-
-##Sept. 3, 2016 v0.81
-+ Fixed bug where upon entering second valid command, program displayed:
-```
-> Error: No file given
-```
-  This was because newline was fed to userInput which created an empty command string. However, the program doesn't check for restart
-  until after the file string was checked, so it ended up as a file error.
-  The fix was done by calling checkRestart() after checkCommand().
-+ Fixed bug where upon finishing encryption/decryption, program displayed:
-```
-> >
-```
-instead of:
-```
-> 
-```
-  This was because the newline character from getting the encryptionKey was passed to userInput in the next call of initialization().
-  The fix was done by calling cin.ignore() after getting the encryptionKey.
 
 #Upcoming
 Shifty is not entirely complete, as there are a few key features I would like to implement eventually.
