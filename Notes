@@ -1,3 +1,5 @@
+***OUTDATED SINCE v0.80 INPUT HANDLING REBUILD***
+
 Input.h/Input.cpp
 
 Currently, the way input is handled is that first initialization() clears the contents of the strings file and command. This is done incase the function was called to restart
