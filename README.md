@@ -98,11 +98,18 @@ instead of:
 #Upcoming
 Shifty is not entirely complete, as there are a few key features I would like to implement eventually.
 + Brute force decryption
-  + Five most common alphabetical characters are assumed to be 'e'.
-  + Returns the decryption key as if the character was 'e' and uses it to decrypt the rest of the text.
-  + Gives user a sample of the five options with the decryption key used.
-    + If it is one of the options, user enters which one and the rest is decrypted.
-    + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
+  + Idea 1 (easier):
+    + Five most common alphabetical characters are assumed to be 'e'.
+    + Returns the decryption key as if the character was 'e' and uses it to decrypt the rest of the text.
+    + Gives user a sample of the five options with the decryption key used.
+      + If it is one of the options, user enters which one and the rest is decrypted.
+      + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
+  + Idea 2 (harder):
+    + Include a .txt file of english words
+    + Take samples from the cipher text and apply all 26 decryptions
+    + Compare from each decryption every word
+      + Whichever has the most matching is most likely the right key
+    + Use the key to decrypt the rest and output to file
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.
