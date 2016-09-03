@@ -30,6 +30,9 @@ Shifty is not entirely complete, as there are a few key features I would like to
   + Gives user a sample of the five options with the decryption key used.
     + If it is one of the options, user enters which one and the rest is decrypted.
     + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
++ Create input handling for getting encryption key (specifically, get numbers only and return error if it is anything else)
++ Fix how the ciphertext/plaintext is read and written to the new file
+  + Currently, the reading taking place doesn't include the newline '\n' character.
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.

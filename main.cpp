@@ -5,12 +5,14 @@ using namespace std;
 
 int main()
 {
-	string command, file;
+	string file;
 	Status status;
-	int encryptionKey = 0;
 
-	initialization(command, file, status);
-	readFile(file, encryptionKey, status);
+	for(;;)
+	{
+		initialization(file, status);
+		readFile(file, status);
+	}
 
-	main();
+	return 0;
 }

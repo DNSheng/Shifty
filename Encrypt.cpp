@@ -1,5 +1,5 @@
 #include "Encrypt.h"
-#include "CharParse.h"
+#include "Modifications.h"
 
 int encryptChar(int encryptionKey, int fileCharNum, bool isUpper)
 {

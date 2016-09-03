@@ -4,7 +4,9 @@
 enum Status
 {
 	DECRYPTING,
-	ENCRYPTING
+	ENCRYPTING,
+	RESTART,
+	HELP
 };
 
 #endif

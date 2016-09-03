@@ -1,0 +1,24 @@
+Input.h/Input.cpp
+
+Currently, the way input is handled is that first initialization() clears the contents of the strings file and command. This is done incase the function was called to restart
+the program due to an unknown command or file. In any case, it is good to clear.
+Next, it calls the getUserInput(), wherein a user will enter both the command and file  location in a single string.
+This string is then passed into getUserInput() where it must be dissected into the command part and the file location part. This is done by cutting at the ' ' empty space and
+feeding the command/file location string into it's respective variable in main.cpp. The feeding is done since each function requires passes references to the variables in the
+arguments.
+The retrieveCommand() is pretty straightforward as it scans through every char in the string and stops until it gets to the ' ' empty space. The part before is considered the
+command and the location it stopped at is where retrieveFile() will start its scan. If it gets to the end and there is no ' ' empty space, then there must be no file given and
+so the entire userInput is a command.
+At retrieveFile(), it starts from where retrieveCommand() stopped (i.e. at fileStartingPoint) unless of it never stopped. If it never stops, then it doesn't bother retrieving
+the file location. If it did, then it cuts the remainder. NOTE: The remainder is not necessarily a file location as there could be other crap written after. This is fine as it
+will check for this at checkFile().
+Now, the second part of initialization() starts, which is userInputCheck(). First, it checks the command with commandCheck().
+With commandCheck(), it prioritizes the keywords not associated with encryption/decryption, but still has a meaning to the program. These currently being: exit and cls.
+The exitCheck() checks if the user requested to exit, and if they do ends the program.
+Afterwards, isClearCheck() starts to see if the user requested to clear the screen. If so, it will clear the screen using system("cls"), then call initialization() again to
+restart the process.
+Now that the operations are checked, commandCheck() checks to see whether the user wants to encrypt or decrypt and updating the status to the appropriate state.
+If neither of the above operations occur, then the user must have entered an invalid/unrecognized command and so initialization() is called to restart the process.
+Lastly, checkFile() is what checks the remainder of userInput. First, if it is empty, then no file was given. This only occurs if the command was "encrypt" or "decrypt" since
+it would otherwise not get this far before initialization() was called. So, an error is displayed on screen saying that no file was given.
+Then it checks if the string ends with ".txt". If it does, then it should be fine as it will be an entire word

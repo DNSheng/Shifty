@@ -5,7 +5,7 @@
 
 #include <string>
 
-void beginDecryption(std::string& line, int& encryptionKey, Status status, const char* FileWritingTo);		//Status address& ???
+void beginDecryption(std::string& line, int& encryptionKey, Status status, const char* FileWritingTo);
 void decryptWithoutKey();
 int decryptChar(int encryptionKey, int fileCharNum, bool isUpper);
 

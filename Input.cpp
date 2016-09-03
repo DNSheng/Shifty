@@ -1,210 +1,271 @@
-/*
- * This is what handles and checks the user input before it is sent to any other functions.
- * This recieves:
- * 	- Command
- * 	- Name/location of file
- * 	- Encryption/Decryption Key
- * This checks:
- * 	- Commands
- * 		- exit
- * 		- quit
- * 		- encrypt
- * 		- decrypt
- *
- * Fix the getCommand(). If entering an invalid command with a file, it gives an error twice.
- * First, it uses the invalid command as a command, then it loops again and uses the file name
- * as a command.
- */
-
 #include "Input.h"
+#include "Operations.h"
+#include "Help.h"
 
 #include <iostream>
 
-void initialization(std::string& command, std::string& file, Status& status)
+void initialization(std::string& file, Status& status)
 {
+	userInput.clear();
 	command.clear();
 	file.clear();
-	getUserInput(command, file);
-	userInputCheck(command, file, status);
-}
 
-void getUserInput(std::string& command, std::string& file)
-{
-	std::string userInput;
 	std::cout << "> ";
 	getline(std::cin, userInput);
-	interpretInput(userInput, command, file);
+	std::cin.clear();
+	splitting(userInput, command, file);
+	checking(command, file, status);
 }
 
-void interpretInput(std::string userInput, std::string& command, std::string& file)
+void handleEmptyInput(std::string userInput, std::string& file, Status& status)
 {
-	//Split userInput into the command and file, ignoring any thing after the file
-	unsigned int fileStartingPoint;
-	splitCommand(userInput, command, fileStartingPoint);
-	splitFile(userInput, file, fileStartingPoint);
+	if(userInput.length() < 1)
+	{
+		initialization(file, status);
+	}
 }
 
-void splitCommand(std::string userInput, std::string& command, unsigned int& fileStartingPoint)
+void splitting(std::string userInput, std::string& command, std::string& file)
+{
+	unsigned int pointer = 0;
+
+	splitCommand(userInput, command, pointer);
+	splitFile(userInput, file, pointer);
+}
+
+void splitCommand(std::string userInput, std::string& command, unsigned int& pointer)
 {
 	std::string tempString;
+
 	for(unsigned int i = 0; i < userInput.length(); i++)
 	{
 		if(userInput[i] == ' ')
 		{
 			tempString = userInput.substr(0, i);
-			fileStartingPoint = i + 1;
+			pointer = i + 1;
 			command = tempString;
 			break;
 		}
 	}
+
 	if(tempString.empty())
 	{
 		command = userInput;
 	}
 }
 
-void splitFile(std::string userInput, std::string& file, unsigned int startingPoint)
+void splitFile(std::string userInput, std::string& file, unsigned int pointer)
 {
-	//If startingPoint == 0, there was no space/file given by user, only a command.
-	//Therefore, the file string in main.cpp will remain empty.
-	if(startingPoint != 0)
+	if(pointer != 0)
 	{
-		file = userInput.substr(startingPoint, userInput.length() - startingPoint);
+		file = userInput.substr(pointer, userInput.length() - pointer);
 	}
 }
 
-void splitFileAlternate(std::string userInput, std::string& file, unsigned int startingPoint)
+void checking(std::string command, std::string& file, Status& status)
 {
-	/*
-	 * This works, but when checking if the file is valid, an error given by checkFile()
-	 * is ambiguous. This scans through the remaining userInput, and ignores improper
-	 * format, i.e. something like "encrypt file.txt test" where there is more text.
-	 * Something like this should throw an error as it is improper format. If the
-	 * userInput has no file section (i.e. SPACE, then filename.txt), then the file
-	 * variable held by main.cpp is left empty.
-	 *
-	 * checkFile() with this function would then only be checking if the file
-	 * (i.e. second argument) has a correct format of ".txt", not if the overall input
-	 * is correct. Therefore cases such as an no file included or extra arguments are
-	 * ignored, and it opts for a generic error. The better version would output to the
-	 * screen what went wrong (ERROR: No file included, ERROR: Too many arguments/Wrong
-	 * format).
-	 */
-	std::string tempString;
-	for(unsigned int i = startingPoint; i < userInput.length(); i++)
-	{
-		if(userInput[i] == ' ')
-		{
-			tempString = userInput.substr(startingPoint, i - startingPoint);
-			file = tempString;
-			break;
-		}
-	}
-	if(tempString.empty())
-	{
-		file = userInput.substr(startingPoint, userInput.length() - startingPoint);
-	}
+	checkCommand(command, status);
+	checkFile(file, status);
+	checkRestart(file, status);
 }
 
-void userInputCheck(std::string& command, std::string& file, Status& status)
+void checkCommand(std::string command, Status& status)
 {
-	checkCommand(command, file, status);
-	checkFile(command, file, status);
-}
-
-void checkCommand(std::string& command, std::string& file, Status& status)
-{
-	exitCheck(command);
-	if(isClearCommand(command))
+	if(command.compare("exit") == 0)
+	{
+		exit(0);
+	}
+	else if(command.compare("clear") == 0)
 	{
 		system("cls");
-		initialization(command, file, status);
+		status = RESTART;
 	}
-	else if(command == "encrypt")
+	else if(command.compare("help") == 0)
+	{
+		helpMenu();
+		status = HELP;
+	}
+	else if(command.compare("encrypt") == 0)
 	{
 		status = ENCRYPTING;
 	}
-	else if(command == "decrypt")
+	else if(command.compare("decrypt") == 0)
 	{
 		status = DECRYPTING;
 	}
 	else
 	{
-		std::cout << "ERROR: Unknown command..." << std::endl;
-		initialization(command, file, status);
+		//Unknown command
+		status = RESTART;
 	}
 }
 
-void checkFile(std::string& command, std::string& file, Status& status)
+void checkFile(std::string file, Status& status)
 {
-	if(file.empty())
+	if(status == HELP)
+	{
+		return;
+	}
+	else if(file.empty())
 	{
 		std::cout << "Error: No file given" << std::endl;
-		initialization(command, file, status);
+		status = RESTART;
+		return;
 	}
-
-	std::string fileExtension = file.substr(file.length() - 4, 4);
-
-	if(fileExtension != ".txt")
+	else if(file.length() < 5)
 	{
-		//Do for-loop to check for a space. If there is, too many arguments. If not, wrong file format.
-		for(unsigned int i = 0; i < file.length(); i++)
-		{
-			if(file[i] == ' ')
-			{
-				std::cout << "Error: Too many arguments" << std::endl;
-				initialization(command, file, status);
-			}
-		}
-		std::cout << "Error: Invalid file format" << std::endl;
-		initialization(command, file, status);
+		std::cout << "Error: Invalid file" << std::endl;
+		status = RESTART;
+		return;
 	}
-}
 
-void checkFileAlternate(std::string& command, std::string& file, Status& status)
-{
+	for(unsigned int i = 0; i < file.length(); i++)
+	{
+		if(file[i] == ' ')
+		{
+			std::cout << "Error: Too many arguments" << std::endl;
+			status = RESTART;
+			return;
+		}
+	}
+
 	std::string fileExtension;
 	fileExtension = file.substr(file.length() - 4, 4);
-	if(fileExtension != ".txt")
+
+	if(fileExtension.compare(".txt") != 0)
 	{
-		std::cout << "Error: Invalid file format..." << std::endl;
-		initialization(command, file, status);
+		std::cout << "Error: Invalid file format" << std::endl;
+		status = RESTART;
 	}
 }
 
-void exitCheck(std::string command)
+void checkRestart(std::string& file, Status& status)
 {
-	if(command == "exit")
+	if((status == RESTART) || (status == HELP))
 	{
+		initialization(file, status);
+	}
+}
+
+void getEncryptionKey(int& encryptionKey, Status status)
+{
+	int keyBuffer;
+
+	if(status == ENCRYPTING)
+	{
+		std::cout << "Please enter an encryption key" << std::endl;
+		std::cout << "> ";
+		while(!(std::cin >> keyBuffer))
+		{
+			std::cin.clear();
+			std::cin.ignore(1000, '\n');
+			std::cout << "Error: Invalid key, please try again" << std::endl;
+			std::cout << "> ";
+		}
+		if(isValidKey(keyBuffer))
+		{
+			encryptionKey = keyBuffer;
+			simplifyKey(encryptionKey, status);
+		}
+		else
+		{
+			std::cout << "Error: Invalid key, please try again" << std::endl;
+			getEncryptionKey(encryptionKey, status);
+		}
+	}
+	else if(status == DECRYPTING)
+	{
+		std::cout << "Please enter the decryption key (enter 0 to brute force)" << std::endl;
+		std::cout << "> ";
+		while(!(std::cin >> keyBuffer))
+		{
+			std::cin.clear();
+			std::cin.ignore(1000, '\n');
+			std::cout << "Error: Invalid key, please try again" << std::endl;
+			std::cout << "> ";
+		}
+		if(isValidKey(keyBuffer))
+		{
+			encryptionKey = keyBuffer;
+			simplifyKey(encryptionKey, status);
+		}
+		else
+		{
+			std::cout << "Error: Invalid key, please try again" << std::endl;
+			getEncryptionKey(encryptionKey, status);
+		}
+	}
+	else
+	{
+		std::cout << "Error: An unexpected error has occurred" << std::endl;
+		//TODO: Restart the program?
 		exit(0);
 	}
 }
 
-bool isClearCommand(std::string command)
+void simplifyKey(int& encryptionKey, Status status)
 {
-	if(command == "cls")
+	if(status == ENCRYPTING)
+	{
+		if(encryptionKey < 0)
+		{
+			if(encryptionKey % CIPHER_SIZE == 0)
+			{
+				encryptionKey = 0;
+			}
+			else
+			{
+				encryptionKey = CIPHER_SIZE + (encryptionKey % CIPHER_SIZE);
+			}
+		}
+		else
+		{
+			encryptionKey = encryptionKey % CIPHER_SIZE;
+		}
+	}
+	else
+	{
+		encryptionKey = CIPHER_SIZE - (encryptionKey % CIPHER_SIZE);				//EXPERIMENTAL
+	}
+}
+
+bool isValidKey(int encryptionKey)
+{
+	std::string keyString = std::to_string(encryptionKey);
+
+	if(keyString.length() > 1)
+	{
+		for(unsigned i = 1; i < keyString.length(); i++)
+		{
+			if(!isNumber(keyString[i]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	else
+	{
+		if(isNumber(keyString[0]))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+bool isNumber(char inputChar)
+{
+	int charASCII = charToInt(inputChar);
+	if((charASCII >= ASCII_ZERO) && (charASCII <= ASCII_NINE))
 	{
 		return true;
 	}
 	else
 	{
 		return false;
-	}
-}
-
-void getEncryptionKey(int& encryptionKey, Status& status)
-{
-	if(status == DECRYPTING)
-	{
-		std::cout << "Enter the decrypting key (to solve, enter 0):" << std::endl << "> ";
-	}
-	else if(status == ENCRYPTING)
-	{
-		std::cout << "Enter the encryption key: " << std::endl << "> ";
-	}
-	std::cin >> encryptionKey;
-	if((encryptionKey > CIPHER_SIZE) | (encryptionKey < 0))
-	{
-		encryptionKey = (encryptionKey % CIPHER_SIZE);
 	}
 }

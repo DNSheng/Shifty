@@ -1,5 +1,5 @@
-#ifndef CONVERSIONS_H
-#define CONVERSIONS_H
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
 
 #include "Status.h"
 

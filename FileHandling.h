@@ -3,10 +3,10 @@
 
 #include "Status.h"
 
-#include <fstream>
+#include <string>
 
-void readFile(std::string fileName, int encryptionKey, Status status);
-void createNewFile(const char* fileName);
-void appendToFile(const char* fileName, std::string input);
+void readFile(std::string file, Status status);
+void createNewFile(const char* newFileName);
+void appendStringToFile(const char* fileName, std::string input);
 
 #endif

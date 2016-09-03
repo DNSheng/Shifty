@@ -6,23 +6,28 @@
 #include <string>
 
 #define CIPHER_SIZE 26
+#define ASCII_ZERO	48
+#define ASCII_NINE	57
+#define ASCII_MINUS 45
 
-void initialization(std::string& command, std::string& file, Status& status);
+static std::string command, userInput;
 
-void getUserInput(std::string& command, std::string& file);
-void interpretInput(std::string userInput, std::string& command, std::string& file);
-void splitCommand(std::string userInput, std::string& command, unsigned int& fileStartingPoint);
-void splitFile(std::string userInput, std::string& file, unsigned int startingPoint);
+void initialization(std::string& file, Status& status);
 
-void userInputCheck(std::string& command, std::string& file, Status& status);
-void checkCommand(std::string& command, std::string& file, Status& status);
-void checkFile(std::string& command, std::string& file, Status& status);
-void exitCheck(std::string command);
-bool isClearCommand(std::string command);
+void handleEmptyInput(std::string userInput, std::string& file, Status& status);
 
-void getEncryptionKey(int& encryptionKey, Status& status);
+void splitting(std::string userInput, std::string& command, std::string& file);
+void splitCommand(std::string userInput, std::string& command, unsigned int& pointer);
+void splitFile(std::string userInput, std::string& file, unsigned int pointer);
 
-void splitFileAlternate(std::string userInput, std::string& file, unsigned int startingPoint);
-void checkFileAlternate(std::string& command, std::string& file, Status& status);
+void checking(std::string command, std::string& file, Status& status);
+void checkCommand(std::string command, Status& status);
+void checkFile(std::string file, Status& status);
+void checkRestart(std::string& file, Status& status);
+
+void getEncryptionKey(int& encryptionKey, Status status);
+void simplifyKey(int& encryptionKey, Status status);
+bool isValidKey(int encryptionKey);
+bool isNumber(char inputChar);
 
 #endif

@@ -1,5 +1,5 @@
 #include "Decrypt.h"
-#include "CharParse.h"
+#include "Modifications.h"
 
 #include <iostream>
 
@@ -7,6 +7,7 @@ void decryptWithoutKey()
 {
 	std::cout << "Not done yet..." << std::endl;
 }
+
 int decryptChar(int encryptionKey, int fileCharNum, bool isUpper)
 {
 	int encryptedChar, decryptionDiff;
@@ -42,6 +43,7 @@ int decryptChar(int encryptionKey, int fileCharNum, bool isUpper)
 	//cout << "ENCRYPTEDCHAR: " << encryptedChar << endl;													//DEBUG STATEMENT
 	return encryptedChar;
 }
+
 void beginDecryption(std::string& line, int& encryptionKey, Status status, const char* fileWritingTo)
 {
 	if(encryptionKey == 0)
@@ -50,6 +52,6 @@ void beginDecryption(std::string& line, int& encryptionKey, Status status, const
 	}
 	else
 	{
-		passingCharInLine(line, encryptionKey, status, fileWritingTo);
+		modifyLine(line, encryptionKey, status, fileWritingTo);
 	}
 }
