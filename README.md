@@ -62,7 +62,7 @@ Windows Example:
 ```
 
 #Patch Notes
-##Sept. 2, 2016
+##Sept. 2, 2016 v0.80
 + Complete rebuild done for input handling, file reading, file writing, and character encryption
   + Input handling now works by getting a single line and splitting it into a command and file location
     + More exceptions handled with additional accompanying error messages
@@ -74,6 +74,7 @@ Windows Example:
   + Fixed bug where non-alphabet characters were being ignored
   + File writing properly formats output to be identical to the input
 + Included a help menu
++ Included a start up menu
 + Current bug: Finishing a cycle (initialization() and readFile() done) and starting another will output to the screen:
 ```
 > Error: No file given
@@ -91,9 +92,4 @@ Shifty is not entirely complete, as there are a few key features I would like to
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.
-+ Description upon opening the program.
-  + Name of program
-  + Command for help menu
-    + Create a help menu
-  + Name of author
 + Include screenshots of the program in README

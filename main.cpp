@@ -1,3 +1,4 @@
+#include "Menu.h"
 #include "Input.h"
 #include "FileHandling.h"
 
@@ -7,6 +8,8 @@ int main()
 {
 	string file;
 	Status status;
+
+	mainMenu();
 
 	for(;;)
 	{
