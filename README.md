@@ -62,6 +62,22 @@ Windows Example:
 ```
 
 #Patch Notes
+##Sept. 4, 2016 v0.82
++ Removed Encrypt.cpp and Decrypt.cpp, and merged them together forming Crypt.cpp
+  + Encrypt.cpp and Decrypt.cpp now useless!
+  + Crypt.cpp uses the same code as encryptChar() in Encrypt.cpp
+  + Decryption works by modifying the encryptionKey to essentially CIPHER_SIZE - encryptionKey
+    + simplifyKey() in Input.cpp modified for this to work
++ Reduced readFile() in FileHandling.cpp as a result of Crypt.cpp change
++ Created BruteForce.cpp in preparation of brute force solving, although it will come after fixes to getEncryptionKey() and createNewFile()
++ Removed code smell from getEncryptionKey(), reducing size of code as both options only differed by initial message.
+  + Created a new method that outputs different message based on status
++ Modified all parameters of functions that were passed values
+  + Changed anything passed by value to pass by const reference
+  + This prevents copies from forming as:
+  	+ They were not necessary
+  	+ It reduces performance (although barely)
+
 ##Sept. 3, 2016 v0.81
 + Fixed bug where upon entering second valid command, program displayed:
 ```
@@ -112,6 +128,11 @@ Shifty is not entirely complete, as there are a few key features I would like to
     + Compare from each decryption every word
       + Whichever has the most matching is most likely the right key
     + Use the key to decrypt the rest and output to file
++ Input for getEncryptionKey() still not secure at filtering invalid input
+  + Things like: 0+, 0 +, 0 + /, etc. still work
+  + Invalid input like examples above also cause shifty to run again, probably since it causes cin to carry the chars beyond the number to
+    the next run of the program.
+    + Ex. Something like "+ /" is still sitting in cin, and therefore get fed into userInput.
 + Writing ciphertext/plaintext output to a new file with a custom name/location.
   + Creating a user prompt/check if that file already exists
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.

@@ -1,12 +1,11 @@
 #include "Modifications.h"
 #include "Operations.h"
-#include "Encrypt.h"
-#include "Decrypt.h"
+#include "Crypt.h"
 #include "FileHandling.h"
 
 #include <iostream>
 
-void modifyChar(int encryptionKey, char fileChar, Status status, const char* fileWritingTo)
+void modifyChar(const int& encryptionKey, const char& fileChar, const Status& status, const char* fileWritingTo)
 {
 	int fileCharNumber = charToInt(fileChar);
 	int modifiedInteger;
@@ -16,11 +15,11 @@ void modifyChar(int encryptionKey, char fileChar, Status status, const char* fil
 		//Lowercase
 		if(status == ENCRYPTING)
 		{
-			modifiedInteger = encryptChar(encryptionKey, fileCharNumber, false);
+			modifiedInteger = cryptChar(encryptionKey, fileCharNumber, false);
 		}
 		else if(status == DECRYPTING)
 		{
-			modifiedInteger = decryptChar(encryptionKey, fileCharNumber, false);
+			modifiedInteger = cryptChar(encryptionKey, fileCharNumber, false);
 		}
 	}
 	else if((fileCharNumber >= UPPERCASE_A_BOUND) & (fileCharNumber <= UPPERCASE_Z_BOUND))
@@ -28,11 +27,11 @@ void modifyChar(int encryptionKey, char fileChar, Status status, const char* fil
 		//Uppercase
 		if(status == ENCRYPTING)
 		{
-			modifiedInteger = encryptChar(encryptionKey, fileCharNumber, true);
+			modifiedInteger = cryptChar(encryptionKey, fileCharNumber, true);
 		}
 		else if(status == DECRYPTING)
 		{
-			modifiedInteger = decryptChar(encryptionKey, fileCharNumber, true);
+			modifiedInteger = cryptChar(encryptionKey, fileCharNumber, true);
 		}
 	}
 	else
@@ -46,7 +45,7 @@ void modifyChar(int encryptionKey, char fileChar, Status status, const char* fil
 	modifiedLine.append(currentModifiedChar);
 }
 
-void modifyLine(std::string& line, int encryptionKey, Status status, const char* fileWritingTo)
+void modifyLine(std::string& line, const int& encryptionKey, const Status& status, const char* fileWritingTo)
 {
 	char fileChar;
 	if(line.length() < 1)

@@ -2,12 +2,12 @@
 #include "Operations.h"
 #include "Input.h"
 #include "Modifications.h"
-#include "Decrypt.h"
+#include "BruteForce.h"
 
 #include <iostream>
 #include <fstream>
 
-void readFile(std::string file, Status status)
+void readFile(const std::string& file, const Status& status)
 {
 	std::string line, newFileName;
 	int encryptionKey;
@@ -17,37 +17,22 @@ void readFile(std::string file, Status status)
 	const char* fileChar = file.c_str();
 
 	std::ifstream inputFile(fileChar);
+
 	if(inputFile.is_open())
 	{
-		if(status == ENCRYPTING)
+		getEncryptionKey(encryptionKey, status);
+		if((encryptionKey == 0) && (status == DECRYPTING))
 		{
-			getEncryptionKey(encryptionKey, status);
-			createNewFile(newFileNameChar);
-			while(!inputFile.eof())
-			{
-				getline(inputFile, line);
-				modifyLine(line, encryptionKey, status, newFileNameChar);
-			}
-			inputFile.close();
-			std::cout << "Encryption is complete" << std::endl;
+			startBruteForce(file);
 		}
-		else if(status == DECRYPTING)
+		createNewFile(newFileNameChar);				//Something over here in the future for creating custom files
+		while(!inputFile.eof())
 		{
-			getEncryptionKey(encryptionKey, status);
-			createNewFile(newFileNameChar);
-			while(!inputFile.eof())
-			{
-				getline(inputFile, line);
-				beginDecryption(line, encryptionKey, status, newFileNameChar);
-			}
-			inputFile.close();
-			std::cout << "Decryption is complete" << std::endl;
+			getline(inputFile, line);
+			modifyLine(line, encryptionKey, status, newFileNameChar);
 		}
-		else
-		{
-			std::cout << "Error: An unexpected error has occurred" << std::endl;
-			return;
-		}
+		inputFile.close();
+		endingMessage(status);
 	}
 	else
 	{
@@ -61,7 +46,7 @@ void createNewFile(const char* newFileName)
 	newFile.close();
 }
 
-void appendStringToFile(const char* fileName, std::string input)
+void appendStringToFile(const char* fileName, const std::string& input)
 {
 	std::ofstream newFile(fileName, std::ios::out | std::ios::app);
 	if(newFile.is_open())
@@ -74,4 +59,16 @@ void appendStringToFile(const char* fileName, std::string input)
 		std::cout << "Error: There was a problem writing to the file" << std::endl;
 	}
 
+}
+
+void endingMessage(const Status& status)
+{
+	if(status == ENCRYPTING)
+	{
+		std::cout << "Encryption is complete" << std::endl;
+	}
+	else
+	{
+		std::cout << "Decryption is complete" << std::endl;
+	}
 }

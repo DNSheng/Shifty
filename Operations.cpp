@@ -1,16 +1,16 @@
 #include "Operations.h"
 
-int charToInt(char inputChar)
+int charToInt(const char& inputChar)
 {
 	return (int)inputChar;
 }
 
-char intToChar(int inputInt)
+char intToChar(const int& inputInt)
 {
 	return (char)inputInt;
 }
 
-std::string generateNewName(std::string currentName, Status status)
+std::string generateNewName(const std::string& currentName, const Status& status)
 {
 	int currentNameSize = currentName.length() - 4;					//Removing ".txt"
 	std::string newName = currentName.substr(0, currentNameSize);

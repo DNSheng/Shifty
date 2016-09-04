@@ -5,8 +5,9 @@
 
 #include <string>
 
-void readFile(std::string file, Status status);
+void readFile(const std::string& file, const Status& status);
 void createNewFile(const char* newFileName);
-void appendStringToFile(const char* fileName, std::string input);
+void appendStringToFile(const char* fileName, const std::string& input);
+void endingMessage(const Status& status);
 
 #endif

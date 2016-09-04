@@ -15,20 +15,19 @@ static std::string command, userInput;
 void initialization(std::string& file, Status& status);
 void inputArrow();
 
-void handleEmptyInput(std::string userInput, std::string& file, Status& status);
+void splitting(const std::string& userInput, std::string& command, std::string& file);
+void splitCommand(const std::string& userInput, std::string& command, unsigned int& pointer);
+void splitFile(const std::string& userInput, std::string& file, const unsigned int& pointer);
 
-void splitting(std::string userInput, std::string& command, std::string& file);
-void splitCommand(std::string userInput, std::string& command, unsigned int& pointer);
-void splitFile(std::string userInput, std::string& file, unsigned int pointer);
-
-void checking(std::string command, std::string& file, Status& status);
-void checkCommand(std::string command, Status& status);
-void checkFile(std::string file, Status& status);
+void checking(const std::string& command, std::string& file, Status& status);
+void checkCommand(const std::string& command, Status& status);
+void checkFile(const std::string& file, Status& status);
 void checkRestart(std::string& file, Status& status);
 
-void getEncryptionKey(int& encryptionKey, Status status);
-void simplifyKey(int& encryptionKey, Status status);
-bool isValidKey(int encryptionKey);
-bool isNumber(char inputChar);
+void getEncryptionKey(int& encryptionKey, const Status& status);
+void getKeyMessage(const Status& status);
+bool isValidKey(const int& encryptionKey);
+bool isNumber(const char& inputChar);
+void simplifyKey(int& encryptionKey, const Status& status);
 
 #endif

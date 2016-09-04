@@ -21,15 +21,7 @@ void inputArrow()
 	std::cout << "> ";
 }
 
-void handleEmptyInput(std::string userInput, std::string& file, Status& status)
-{
-	if(userInput.length() < 1)
-	{
-		initialization(file, status);
-	}
-}
-
-void splitting(std::string userInput, std::string& command, std::string& file)
+void splitting(const std::string& userInput, std::string& command, std::string& file)
 {
 	unsigned int pointer = 0;
 
@@ -37,7 +29,7 @@ void splitting(std::string userInput, std::string& command, std::string& file)
 	splitFile(userInput, file, pointer);
 }
 
-void splitCommand(std::string userInput, std::string& command, unsigned int& pointer)
+void splitCommand(const std::string& userInput, std::string& command, unsigned int& pointer)
 {
 	std::string tempString;
 
@@ -58,7 +50,7 @@ void splitCommand(std::string userInput, std::string& command, unsigned int& poi
 	}
 }
 
-void splitFile(std::string userInput, std::string& file, unsigned int pointer)
+void splitFile(const std::string& userInput, std::string& file, const unsigned int& pointer)
 {
 	if(pointer != 0)
 	{
@@ -66,7 +58,7 @@ void splitFile(std::string userInput, std::string& file, unsigned int pointer)
 	}
 }
 
-void checking(std::string command, std::string& file, Status& status)
+void checking(const std::string& command, std::string& file, Status& status)
 {
 	checkCommand(command, status);
 	checkRestart(file, status);
@@ -74,7 +66,7 @@ void checking(std::string command, std::string& file, Status& status)
 	checkRestart(file, status);
 }
 
-void checkCommand(std::string command, Status& status)
+void checkCommand(const std::string& command, Status& status)
 {
 	if(command.compare("exit") == 0)
 	{
@@ -101,11 +93,12 @@ void checkCommand(std::string command, Status& status)
 	else
 	{
 		//Unknown command
+		std::cout << "Error: Invalid command" << std::endl;
 		status = RESTART;
 	}
 }
 
-void checkFile(std::string file, Status& status)
+void checkFile(const std::string& file, Status& status)
 {
 	if(status == HELP)
 	{
@@ -152,59 +145,46 @@ void checkRestart(std::string& file, Status& status)
 	}
 }
 
-void getEncryptionKey(int& encryptionKey, Status status)
+void getEncryptionKey(int& encryptionKey, const Status& status)
 {
 	int keyBuffer;
 
+	getKeyMessage(status);
+
+	while(!(std::cin >> keyBuffer))
+	{
+		std::cin.clear();
+		std::cin.ignore(1000, '\n');
+		std::cout << "Error: Invalid key, please try again" << std::endl;
+		inputArrow();
+	}
+
+	std::cin.ignore();
+
+	if(isValidKey(keyBuffer))
+	{
+		encryptionKey = keyBuffer;
+		simplifyKey(encryptionKey, status);
+	}
+	else
+	{
+		std::cout << "Error: Invalid key, please try again" << std::endl;
+		getEncryptionKey(encryptionKey, status);
+	}
+}
+
+void getKeyMessage(const Status& status)
+{
 	if(status == ENCRYPTING)
 	{
 		std::cout << "Please enter an encryption key" << std::endl;
 		inputArrow();
-		while(!(std::cin >> keyBuffer))
-		{
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "Error: Invalid key, please try again" << std::endl;
-			inputArrow();
-		}
-
-		std::cin.ignore();
-
-		if(isValidKey(keyBuffer))
-		{
-			encryptionKey = keyBuffer;
-			simplifyKey(encryptionKey, status);
-		}
-		else
-		{
-			std::cout << "Error: Invalid key, please try again" << std::endl;
-			getEncryptionKey(encryptionKey, status);
-		}
 	}
 	else if(status == DECRYPTING)
 	{
-		std::cout << "Please enter the decryption key (enter 0 to brute force)" << std::endl;
+		std::cout << "Please enter the decryption key (key used to encrypt)" << std::endl;
+		std::cout << "Enter 0 to brute force" << std::endl;
 		inputArrow();
-		while(!(std::cin >> keyBuffer))
-		{
-			std::cin.clear();
-			std::cin.ignore(1000, '\n');
-			std::cout << "Error: Invalid key, please try again" << std::endl;
-			inputArrow();
-		}
-
-		std::cin.ignore();
-
-		if(isValidKey(keyBuffer))
-		{
-			encryptionKey = keyBuffer;
-			simplifyKey(encryptionKey, status);
-		}
-		else
-		{
-			std::cout << "Error: Invalid key, please try again" << std::endl;
-			getEncryptionKey(encryptionKey, status);
-		}
 	}
 	else
 	{
@@ -213,7 +193,35 @@ void getEncryptionKey(int& encryptionKey, Status status)
 	}
 }
 
-void simplifyKey(int& encryptionKey, Status status)
+bool isValidKey(const int& encryptionKey)
+{
+	int absoluteValue = abs(encryptionKey);
+	std::string keyString = std::to_string(absoluteValue);
+
+	for(unsigned i = 1; i < keyString.length(); i++)
+	{
+		if(!isNumber(keyString[i]))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isNumber(const char& inputChar)
+{
+	int charASCII = charToInt(inputChar);
+	if((charASCII >= ASCII_ZERO) && (charASCII <= ASCII_NINE))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void simplifyKey(int& encryptionKey, const Status& status)
 {
 	if(status == ENCRYPTING)
 	{
@@ -235,47 +243,13 @@ void simplifyKey(int& encryptionKey, Status status)
 	}
 	else
 	{
-		encryptionKey = CIPHER_SIZE - (encryptionKey % CIPHER_SIZE);				//EXPERIMENTAL
-	}
-}
-
-bool isValidKey(int encryptionKey)
-{
-	std::string keyString = std::to_string(encryptionKey);
-
-	if(keyString.length() > 1)
-	{
-		for(unsigned i = 1; i < keyString.length(); i++)
+		if(encryptionKey < 0)
 		{
-			if(!isNumber(keyString[i]))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	else
-	{
-		if(isNumber(keyString[0]))
-		{
-			return true;
+			encryptionKey = -1 * (encryptionKey % CIPHER_SIZE);
 		}
 		else
 		{
-			return false;
+			encryptionKey = CIPHER_SIZE - (encryptionKey % CIPHER_SIZE);
 		}
-	}
-}
-
-bool isNumber(char inputChar)
-{
-	int charASCII = charToInt(inputChar);
-	if((charASCII >= ASCII_ZERO) && (charASCII <= ASCII_NINE))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }

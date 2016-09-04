@@ -1,7 +1,7 @@
-#include "Encrypt.h"
+#include "Crypt.h"
 #include "Modifications.h"
 
-int encryptChar(int encryptionKey, int fileCharNum, bool isUpper)
+int cryptChar(const int& encryptionKey, const int& fileCharNum, const bool& isUpper)
 {
 	int encryptedChar, encryptionSum;
 	encryptionSum = fileCharNum + encryptionKey;
