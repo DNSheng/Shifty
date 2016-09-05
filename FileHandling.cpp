@@ -35,16 +35,20 @@ void readFile(const std::string& file, const Status& status)
 			}
 			else
 			{
-				//Passing argument useless, as it is a const and therefore it still overwrites
-				fileCreation(newFileNameChar);
-				//Trivial, probably bad solution is to copy while() block below + bottom 2 statements, then add a return;
+				std::string customFileName;
+				customFileName = getNewFileName();
+				const char* customFileNameChar = customFileName.c_str();
+
+				while(!inputFile.eof())
+				{
+					getline(inputFile, line);
+					modifyLine(line, encryptionKey, customFileNameChar);
+				}
+				inputFile.close();
+				endingMessage(status);
+				return;
 			}
 		}
-		else
-		{
-			createNewFile(newFileNameChar);
-		}
-
 		while(!inputFile.eof())
 		{
 			getline(inputFile, line);
@@ -59,9 +63,6 @@ void readFile(const std::string& file, const Status& status)
 	}
 }
 
-/*
- * This function might be useless, since if we skip this step, appendStringToFile() will also create the file.
- */
 void createNewFile(const char* newFileName)
 {
 	std::ofstream newFile(newFileName);
@@ -108,33 +109,26 @@ bool fileExists(const char* fileName)
 	return false;
 }
 
-void fileCreation(const char* newFileNameChar)
-{
-	std::string newFileName;
-
-	newFileName = getNewFileName();
-	newFileNameChar = newFileName.c_str();
-
-	if(isValidNewFile(newFileNameChar))
-	{
-		createNewFile(newFileNameChar);
-	}
-	else
-	{
-		std::cout << "Error: File is invalid (wrong extention, or already exists)" << std::endl;
-		std::cout << "Please try again." << std::endl;
-		fileCreation(newFileNameChar);
-	}
-}
-
-bool isValidNewFile(const char* fileName)
+bool isValidFileName(const std::string& fileName)
 {
 	//Ends in .txt
 	//Doesn't already exist
-	std::string fileNameString = fileName;
-	if((isValidFileExt(fileNameString)) && (!fileExists(fileName)))
+	const char* fileNameChar = fileName.c_str();
+	if(isValidFileExt(fileName))
 	{
-		return true;
+		if(!fileExists(fileNameChar))
+		{
+			return true;
+		}
+		else
+		{
+			std::cout << "Error: File already exists" << std::endl;
+			return false;
+		}
 	}
-	return false;
+	else
+	{
+		std::cout << "Error: Invalid file extension" << std::endl;
+		return false;
+	}
 }

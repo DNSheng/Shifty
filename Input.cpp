@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Operations.h"
 #include "Help.h"
+#include "FileHandling.h"
 
 #include <iostream>
 
@@ -298,5 +299,14 @@ std::string getNewFileName()
 	inputArrow();
 	getline(std::cin, newName);
 
-	return newName;
+	if(isValidFileName(newName))
+	{
+		return newName;
+	}
+	else
+	{
+		std::cout << "Please try again." << std::endl;
+		return getNewFileName();
+	}
+
 }
