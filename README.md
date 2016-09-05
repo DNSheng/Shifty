@@ -62,6 +62,14 @@ Windows Example:
 ```
 
 #Patch Notes
+##Sept. 4, 2016 v0.90
++ Finished overwriting and creating new files
+  + If a file_encrypted.txt or file_decrypted.txt exists, program asks whether to overwrite
+  + Entering 'y' will overwrite the contents
+  + Entering 'n' will ask user to name a new file to write to
+  	+ Currently, does not check the new file. Will be next few fixes
+  + May be more bugs introduced
+
 ##Sept. 4, 2016 v0.82.1
 + Refactored modifyChar() in Modifications.cpp since checking for status now unnecessary with Crypt.cpp
 	+ Modified accompanying header file and function calls as well.
@@ -140,7 +148,8 @@ Shifty is not entirely complete, as there are a few key features I would like to
   + Invalid input like examples above also cause shifty to run again, probably since it causes cin to carry the chars beyond the number to
     the next run of the program.
     + Ex. Something like "+ /" is still sitting in cin, and therefore get fed into userInput.
-+ Writing ciphertext/plaintext output to a new file with a custom name/location.
-  + Creating a user prompt/check if that file already exists
++ If creating a new file instead of overwriting:
+  + Always check new user inputted file to see if it exists. If it does, ask for another file until a valid one is chosen
+  + May not be valid .txt file, check for valid format
 + Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.
 + Include screenshots of the program in README

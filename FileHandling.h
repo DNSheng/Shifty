@@ -10,4 +10,8 @@ void createNewFile(const char* newFileName);
 void appendStringToFile(const char* fileName, const std::string& input);
 void endingMessage(const Status& status);
 
+bool fileExists(const char* fileName);
+void fileCreation(const char* newFileNameChar);
+bool isValidNewFile(const char* fileName);
+
 #endif

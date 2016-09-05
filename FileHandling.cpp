@@ -25,7 +25,26 @@ void readFile(const std::string& file, const Status& status)
 		{
 			startBruteForce(file);
 		}
-		createNewFile(newFileNameChar);				//Something over here in the future for creating custom files
+
+		if(fileExists(newFileNameChar))
+		{
+			std::cout << "Warning! " << newFileName << " already exists. Overwrite? (y/n)" << std::endl;
+			if(isOverwrite())
+			{
+				createNewFile(newFileNameChar);
+			}
+			else
+			{
+				//Passing argument useless, as it is a const and therefore it still overwrites
+				fileCreation(newFileNameChar);
+				//Trivial, probably bad solution is to copy while() block below + bottom 2 statements, then add a return;
+			}
+		}
+		else
+		{
+			createNewFile(newFileNameChar);
+		}
+
 		while(!inputFile.eof())
 		{
 			getline(inputFile, line);
@@ -40,6 +59,9 @@ void readFile(const std::string& file, const Status& status)
 	}
 }
 
+/*
+ * This function might be useless, since if we skip this step, appendStringToFile() will also create the file.
+ */
 void createNewFile(const char* newFileName)
 {
 	std::ofstream newFile(newFileName);
@@ -57,8 +79,10 @@ void appendStringToFile(const char* fileName, const std::string& input)
 	else
 	{
 		std::cout << "Error: There was a problem writing to the file" << std::endl;
+		//Find a way to break out, back to initialization (preferably without passing file everywhere)
+		//Shouldn't happen if isValidFile() checks the NEW user inputted file before it is even opened to write
+		exit(0);
 	}
-
 }
 
 void endingMessage(const Status& status)
@@ -71,4 +95,46 @@ void endingMessage(const Status& status)
 	{
 		std::cout << "Decryption is complete" << std::endl;
 	}
+}
+
+bool fileExists(const char* fileName)
+{
+	std::ifstream file(fileName);
+	if(file.good())
+	{
+		file.close();
+		return true;
+	}
+	return false;
+}
+
+void fileCreation(const char* newFileNameChar)
+{
+	std::string newFileName;
+
+	newFileName = getNewFileName();
+	newFileNameChar = newFileName.c_str();
+
+	if(isValidNewFile(newFileNameChar))
+	{
+		createNewFile(newFileNameChar);
+	}
+	else
+	{
+		std::cout << "Error: File is invalid (wrong extention, or already exists)" << std::endl;
+		std::cout << "Please try again." << std::endl;
+		fileCreation(newFileNameChar);
+	}
+}
+
+bool isValidNewFile(const char* fileName)
+{
+	//Ends in .txt
+	//Doesn't already exist
+	std::string fileNameString = fileName;
+	if((isValidFileExt(fileNameString)) && (!fileExists(fileName)))
+	{
+		return true;
+	}
+	return false;
 }

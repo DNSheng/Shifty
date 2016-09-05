@@ -123,14 +123,23 @@ void checkFile(const std::string& file, Status& status)
 		}
 	}
 
-	std::string fileExtension;
-	fileExtension = file.substr(file.length() - 4, 4);
-
-	if(fileExtension.compare(".txt") != 0)
+	if(!isValidFileExt(file))
 	{
 		std::cout << "Error: Invalid file format" << std::endl;
 		status = RESTART;
 	}
+}
+
+bool isValidFileExt(const std::string& file)
+{
+	std::string fileExtension;
+
+	fileExtension = file.substr(file.length() - 4, 4);
+	if(fileExtension.compare(".txt") != 0)
+	{
+		return false;
+	}
+	return true;
 }
 
 void checkRestart(std::string& file, Status& status)
@@ -248,4 +257,46 @@ void simplifyKey(int& encryptionKey, const Status& status)
 			encryptionKey = CIPHER_SIZE - (encryptionKey % CIPHER_SIZE);
 		}
 	}
+}
+
+bool isOverwrite()
+{
+	char input;
+
+	getOverwriteInput(input);
+
+	if(input == 'y')
+	{
+		return true;
+	}
+	return false;
+}
+
+void getOverwriteInput(char& input)
+{
+	//Would getChar() be better?
+	inputArrow();
+	std::cin >> input;
+	if((input != 'y') && (input != 'n'))
+	{
+		std::cout << "Invalid input. Try again." << std::endl;
+		std::cin.clear();
+		std::cin.ignore(1000, '\n');
+		getOverwriteInput(input);
+	}
+	else
+	{
+		std::cin.ignore();
+	}
+}
+
+std::string getNewFileName()
+{
+	std::string newName;
+
+	std::cout << "Please enter the new file location:" << std::endl;
+	inputArrow();
+	getline(std::cin, newName);
+
+	return newName;
 }
