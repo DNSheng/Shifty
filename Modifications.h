@@ -12,8 +12,8 @@
 
 static std::string modifiedLine;
 
-void modifyChar(const int& encryptionKey, const char& fileChar, const Status& status, const char* fileWritingTo);
-void modifyLine(std::string& line, const int& encryptionKey, const Status& status, const char* fileWritingTo);
+void modifyChar(const int& encryptionKey, const char& fileChar, const char* fileWritingTo);
+void modifyLine(std::string& line, const int& encryptionKey, const char* fileWritingTo);
 
 
 #endif

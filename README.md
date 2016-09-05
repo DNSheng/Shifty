@@ -62,6 +62,10 @@ Windows Example:
 ```
 
 #Patch Notes
+##Sept. 4, 2016 v0.82.1
++ Refactored modifyChar() in Modifications.cpp since checking for status now unnecessary with Crypt.cpp
+	+ Modified accompanying header file and function calls as well.
+
 ##Sept. 4, 2016 v0.82
 + Removed Encrypt.cpp and Decrypt.cpp, and merged them together forming Crypt.cpp
   + Encrypt.cpp and Decrypt.cpp now useless!

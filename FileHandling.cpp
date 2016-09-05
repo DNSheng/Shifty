@@ -29,7 +29,7 @@ void readFile(const std::string& file, const Status& status)
 		while(!inputFile.eof())
 		{
 			getline(inputFile, line);
-			modifyLine(line, encryptionKey, status, newFileNameChar);
+			modifyLine(line, encryptionKey, newFileNameChar);
 		}
 		inputFile.close();
 		endingMessage(status);
