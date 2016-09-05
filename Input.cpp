@@ -80,7 +80,7 @@ void checkCommand(const std::string& command, Status& status)
 	else if(command.compare("help") == 0)
 	{
 		helpMenu();
-		status = HELP;
+		status = RESTART;
 	}
 	else if(command.compare("encrypt") == 0)
 	{
@@ -100,11 +100,7 @@ void checkCommand(const std::string& command, Status& status)
 
 void checkFile(const std::string& file, Status& status)
 {
-	if(status == HELP)
-	{
-		return;
-	}
-	else if(file.empty())
+	if(file.empty())
 	{
 		std::cout << "Error: No file given" << std::endl;
 		status = RESTART;
@@ -139,7 +135,7 @@ void checkFile(const std::string& file, Status& status)
 
 void checkRestart(std::string& file, Status& status)
 {
-	if((status == RESTART) || (status == HELP))
+	if(status == RESTART)
 	{
 		initialization(file, status);
 	}
@@ -247,7 +243,7 @@ void simplifyKey(int& encryptionKey, const Status& status)
 		{
 			encryptionKey = -1 * (encryptionKey % CIPHER_SIZE);
 		}
-		else
+		else if(encryptionKey != 0)
 		{
 			encryptionKey = CIPHER_SIZE - (encryptionKey % CIPHER_SIZE);
 		}

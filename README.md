@@ -65,6 +65,9 @@ Windows Example:
 ##Sept. 4, 2016 v0.82.1
 + Refactored modifyChar() in Modifications.cpp since checking for status now unnecessary with Crypt.cpp
 	+ Modified accompanying header file and function calls as well.
++ Fixed starting brute force decryption work
+	+ Entering '0' as a key simplified it to 26, changed it to ignore simplifying if input was '0'
+	+ Entering '26' does effectively nothing, but does not start brute force (same with all multiples +/-)
 
 ##Sept. 4, 2016 v0.82
 + Removed Encrypt.cpp and Decrypt.cpp, and merged them together forming Crypt.cpp
