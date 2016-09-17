@@ -13,7 +13,7 @@ Shifty takes input of the form:
 ```
 > [COMMAND] [FILE_LOCATION]
 ```
-Special commands not requiring a file can simply be entered on their own accord:
+Special commands not requiring a file can simply be entered by themselves:
 ```
 > [COMMAND]
 ```
