@@ -14,6 +14,7 @@ static std::string command, userInput;
 
 void initialization(std::string& file, Status& status);
 void inputArrow();
+void clearScreen();
 
 void splitting(const std::string& userInput, std::string& command, std::string& file);
 void splitCommand(const std::string& userInput, std::string& command, unsigned int& pointer);

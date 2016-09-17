@@ -5,7 +5,7 @@
 
 void helpMenu()
 {
-	system("cls");
+	clearScreen();
 	std::cout << "Help menu:" << std::endl;
 	std::cout << "--------------------------------------------------------------------" << std::endl;
 	std::cout << "Encryption/decryption is done by entering in the following format:\n" << std::endl;

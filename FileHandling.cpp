@@ -23,7 +23,9 @@ void readFile(const std::string& file, const Status& status)
 		getEncryptionKey(encryptionKey, status);
 		if((encryptionKey == 0) && (status == DECRYPTING))
 		{
+			inputFile.close();
 			startBruteForce(file);
+			return;
 		}
 
 		if(fileExists(newFileNameChar))
@@ -52,6 +54,7 @@ void readFile(const std::string& file, const Status& status)
 		while(!inputFile.eof())
 		{
 			getline(inputFile, line);
+			std::cout << "LINE IS: |" << line << "|" << std::endl;
 			modifyLine(line, encryptionKey, newFileNameChar);
 		}
 		inputFile.close();
@@ -130,5 +133,28 @@ bool isValidFileName(const std::string& fileName)
 	{
 		std::cout << "Error: Invalid file extension" << std::endl;
 		return false;
+	}
+}
+
+void readForGather(const std::string& file, std::vector<std::string>& lineVector)
+{
+	const char* fileName = file.c_str();
+
+	std::string currentLine;
+
+	std::ifstream fileStream(fileName);
+
+	if(fileStream.is_open())
+	{
+		while(!fileStream.eof())
+		{
+			getline(fileStream, currentLine);
+			gatherLine(currentLine, lineVector);
+		}
+		fileStream.close();
+	}
+	else
+	{
+		std::cout << "Error: Unable to find file: " << file << std::endl;
 	}
 }

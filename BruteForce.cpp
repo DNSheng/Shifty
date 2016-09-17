@@ -1,5 +1,5 @@
 #include "BruteForce.h"
-#include "Input.h"		//For CIPHER_SIZE and getting user input for confirmation
+#include "Input.h"			//For getting user input for confirmation
 #include "FileHandling.h"	//For writing final output to file, maybe for including dictionary.txt asset
 #include "Modifications.h"	//For actually decrypting (may need to modify Modifications.cpp or here to take vectors)
 
@@ -28,41 +28,97 @@
 #include <iostream>
 #include <vector>
 
-//MOVE THESE INITIAL DECLARATIONS TO THE HEADER FILE, PARAMETERS NOT FINISHED!
-
-void getSamples(std::vector<std::string>& samples);		//Get samples from throughout the file based on file length
-								//Fills vector with these
-								//Parameters are file inputs and vector
-
-void getInitialSamples(std::vector<std::string>& initial);	//Get initial sample based on file length
-								//Fills vector with these
-								//Parameters are file inputs and vector
-
-void bruteForce(std::vector<std::string>& sample);		//Applies the transformation to all items in vector
-								//Transformation overwrites the sample
-								//Will be used for both 'samples' and 'initial'
-
-void decryptSpecific(std::vector<std::string>& initial, int entryNum)
-								//Decrypt a specific entry for display
-
-void compareWords(std::vector<std::string>& sample);		//Compares the samples to a dictionary, and appends the
-								//amount of matches at the end (at sample[26])
-
-void displayEstimate(std::vector<std::string> initial);		//Displays the one with the best estimate
-								//Afterwards, ask user to verify
-
-void displayAll(std::vector<std::string> initial);		//Display all initial samples if estimate is wrong
-
 void startBruteForce(const std::string& file)
 {
-	std::cout << "Not done yet..." << std::endl;
+	std::vector<std::string> lineVector, decryptions;
+	std::vector<int> matches;
 	
-	std::vector<std::string> samples(CIPHER_SIZE);
-	std::vector<std::string> initial(CIPHER_SIZE);
-	std::vector<int> matches(CIPHER_SIZE);
-	
-	getSamples(samples);
-	getInitialSamples(initial);
-	
-	exit(0);
+	std::string bestLine = getBestString(file, lineVector);
+	std::cout << "The best is: " << bestLine << std::endl;
+
+	//Pass bestLine to be decrypted with 26 different keys, results put in decryptions vector
+	bruteModifyLine(bestLine, decryptions);
+	readVector(decryptions);
+}
+
+/*
+ * Input:   The file path in the form of a string, and the vector that will
+ * 		    hold all lines from the file
+ * Output:  The string which has been determined to be the best to brute
+ * 			force decrypt.
+ * Desc.:	This returns the 'best' line. This is done by first reading
+ * 			the file and collecting all strings in to each entry of the
+ * 			vector. Then, each entry is tested with a function to determine
+ * 			how 'good' it is based on certain attributes.
+ */
+std::string getBestString(const std::string& file, std::vector<std::string>& lineVector)
+{
+	readForGather(file, lineVector);
+	std::cout << "Starting filterStrings()..." << std::endl;
+	return filterStrings(lineVector);
+}
+
+/*
+ * Input:	The current line in the file, the vector holding all lines in
+ * 			the file.
+ * Output:	None
+ * Desc.:	This just takes the current line read from the file and pushes
+ * 			it into the vector that will hold all the lines
+ */
+void gatherLine(const std::string& sampleLine, std::vector<std::string>& lineVector)
+{
+	lineVector.push_back(sampleLine);
+}
+
+/*
+ * Input:	The vector containing all lines from the file
+ * Output:	The string with the highest 'value' (aka the 'best' string)
+ * Desc.:	This iterates through all the strings in the vector and for
+ * 			each string, assigns it a value based on the amount of
+ * 			alphabetical characters contained within. The one with the
+ * 			highest value is the 'best' string.
+ * 			For some reason, if the integers are not initialized then
+ * 			the program doesn't function correctly.
+ */
+std::string filterStrings(const std::vector<std::string>& lineVector)
+{
+	int currentValue = 0, highestValue = 0, position = 0;
+
+	std::vector<int> value;
+
+	for(unsigned int i = 0; i < lineVector.size()-1; i++)
+	{
+		std::string currentLine = lineVector[i];
+
+		for(unsigned int chars = 0; chars < currentLine.size(); chars++)
+		{
+			if(std::isalpha(currentLine[chars]))
+			{
+				currentValue++;
+			}
+		}
+		value.push_back(currentValue);
+		currentValue = 0;
+	}
+
+	for(unsigned int i = 0; i < value.size(); i++)
+	{
+		if(value[i] > highestValue)
+		{
+			position = i;
+			highestValue = value[i];
+		}
+	}
+
+	return lineVector[position];
+}
+
+void readVector(const std::vector<std::string>& vector)
+{
+	std::cout << "LISTING ALL ELEMENTS IN VECTOR:\n-----------" << std::endl;
+
+	for(unsigned int i = 0; i < vector.size()-1; i++)
+	{
+		std::cout << i << ": " << vector[i] << std::endl;
+	}
 }

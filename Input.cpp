@@ -1,3 +1,11 @@
+#ifdef _WIN32
+#define CLEAR	"cls"
+#elif _WIN64
+#define CLEAR	"cls"
+#elif __linux__
+#define CLEAR	"clear"
+#endif
+
 #include "Input.h"
 #include "Operations.h"
 #include "Help.h"
@@ -20,6 +28,12 @@ void initialization(std::string& file, Status& status)
 void inputArrow()
 {
 	std::cout << "> ";
+}
+
+void clearScreen()
+{
+	//Trivial way, but it works for now (and more linux-friendly than cls)
+	system(CLEAR);
 }
 
 void splitting(const std::string& userInput, std::string& command, std::string& file)
@@ -71,11 +85,12 @@ void checkCommand(const std::string& command, Status& status)
 {
 	if(command.compare("exit") == 0)
 	{
+		clearScreen();
 		exit(0);
 	}
 	else if(command.compare("clear") == 0)
 	{
-		system("cls");
+		clearScreen();
 		status = RESTART;
 	}
 	else if(command.compare("help") == 0)

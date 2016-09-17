@@ -60,8 +60,23 @@ Windows Example:
 ```
 > encrypt C:\Users\Dan\Desktop\file.txt
 ```
+Linux Example:
+```
+> encrypt /home/user/Documents/file.txt
+```
 
 #Patch Notes
+##Sept. 16, 2016 v0.92
++ Finished an operating system friendly 'clear screen' functionality (not yet tested on Windows and OSX though)
++ Started work on brute force decryption
+  + Created notes (although may be worthless as current implementation does not follow structure)
+  + Started getting input from file and retrieving 'best' line (most alphabetical characters)
+  + Decrypted the 'best' line 26 different ways and outputs all possible combinations
++ Created a work around for an error where a new line was appended to the end of a file after each successive encryption/decryption by skipping new lines altogether.
+  + Drawback is some formatting is lost.
+  + Whether a new fix will be added in the future is up for consideration.
++ The current plan is to have the release of brute force mark the official launch of shifty. Any bonus features like entering 'help' or 'exit' at any time as well as securing input for encryptionKey to be exact will probably be left for the future. Everything will work fine unless the user actively tries to break the program. The launch may be a while from now since I want to focus on a bit more extensive bug testing just to make sure the 'official' (how many people even know/care?) is stable. In the future, I wil also try to document/describe every function and the overall structure of the program.
+
 ##Sept. 5, 2016 v0.90
 + Finished overwriting and creating new files
   + If a file_encrypted.txt or file_decrypted.txt exists, program asks whether to overwrite
@@ -131,18 +146,11 @@ instead of:
 #Upcoming
 Shifty is not entirely complete, as there are a few key features I would like to implement eventually.
 + Brute force decryption
-  + Idea 1 (easier):
-    + Five most common alphabetical characters are assumed to be 'e'.
-    + Returns the decryption key as if the character was 'e' and uses it to decrypt the rest of the text.
-    + Gives user a sample of the five options with the decryption key used.
-      + If it is one of the options, user enters which one and the rest is decrypted.
-      + If it is not one of the options, brute force with the remaining keys and display a sample with the decryption key used.
-  + Idea 2 (harder):
-    + Include a .txt file of english words
-    + Take samples from the cipher text and apply all 26 decryptions
-    + Compare from each decryption every word
-      + Whichever has the most matching is most likely the right key
-    + Use the key to decrypt the rest and output to file
+  + Include a .txt file of english words
+  + Take samples from the cipher text and apply all 26 decryptions
+  + Compare from each decryption every word
+    + Whichever has the most matching is most likely the right key
+  + Use the key to decrypt the rest and output to file
 + When getting text at any time, user can enter 'help' or 'exit'.
   + Ex. during getEncryptionKey(), isOverwrite(), etc.
   + Entering 'help' will display the help menu while the program still runs
@@ -151,5 +159,4 @@ Shifty is not entirely complete, as there are a few key features I would like to
   + Invalid input like examples above also cause shifty to run again, probably since it causes cin to carry the chars beyond the number to
     the next run of the program.
     + Ex. Something like "+ /" is still sitting in cin, and therefore get fed into userInput.
-+ Modifying the "cls" command to not use system() to make it safer, but to also allow for different OS compatibility.
 + Include screenshots of the program in README
