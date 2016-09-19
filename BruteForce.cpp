@@ -25,6 +25,11 @@
  *   - http://www.dreamincode.net/forums/topic/150469-how-to-import-english-dictionary-in-c/
  */
  
+ /*
+  *	Try "/src/assets/dictionary.txt"
+  *	Try "../src/assets/dictionary.txt"
+  *	Or, try "../assests/dictionary.txt"	(This assumes a final build)
+  */
 #include <iostream>
 #include <vector>
 
