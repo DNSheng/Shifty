@@ -29,6 +29,8 @@
   *	Try "/src/assets/dictionary.txt"
   *	Try "../src/assets/dictionary.txt"
   *	Or, try "../assests/dictionary.txt"	(This assumes a final build)
+  *
+  *	Use eclipse's "import" to actually import the text file, not just dragging/dropping
   */
 #include <iostream>
 #include <vector>
